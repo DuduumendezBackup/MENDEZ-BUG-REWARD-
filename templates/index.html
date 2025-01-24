@@ -10,7 +10,7 @@
             color: #00ff00;
             font-family: 'Courier New', Courier, monospace;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
             height: 100vh;
             margin: 0;
@@ -21,6 +21,16 @@
             font-size: 2.5em;
             text-shadow: 0 0 10px #00ff00;
         }
+        .dashboard {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(42, 42, 42, 0.8);
+            padding: 10px;
+            border-radius: 5px;
+            color: #00ff00;
+            font-size: 0.9em;
+        }
         form {
             background-color: #2a2a2a;
             padding: 20px;
@@ -28,12 +38,15 @@
             box-shadow: 0 0 20px #00ff00;
             width: 300px;
         }
-        input{
+        input[type="text"], input[type="tel"], textarea {
             width: 100%;
             padding: 10px;
             margin: 10px 0;
-            border: none;
+            border: 1px solid #00ff00;
             border-radius: 5px;
+            background-color: #1a1a1a;
+            color: #00ff00;
+            font-size: 1em;
         }
         button {
             background-color: #00ff00;
@@ -49,17 +62,92 @@
             color: #00ff00;
             transition: 0.3s;
         }
+        .notification {
+            display: none;
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #00ff00;
+            color: #1a1a1a;
+            padding: 10px;
+            border-radius: 5px;
+            animation: fadeIn 0.5s, fadeOut 0.5s 2.5s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+        .tick {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #1a1a1a;
+            border-radius: 50%;
+            position: relative;
+            margin-left: 5px;
+            animation: tick 0.5s forwards;
+        }
+        @keyframes tick {
+            0% { transform: scale(0); }
+            50% { transform: scale(1); }
+            100% { transform: scale(1); }
+        }
     </style>
 </head>
 <body>
-    <div>
-        <h1>Submit Your Data</h1>
-        <form action="/submit" method="post">
-            <input type="text" name="username" placeholder="Username" required>
-            <input type="text" name="mobile" placeholder="Mobile" required>
-            <input type="text" name="creds" placeholder="Credentials" required>
-            <button type="submit">Submit</button>
-        </form>
+    <div class="dashboard" id="dashboard">
+        <p>Location: <span id="location">Loading...</span></p>
+        <p>IP Address: <span id="ip">Loading...</span></p>
+        <p>Battery: <span id="battery">Loading...</span></p>
     </div>
+    <h1>Submit Your Data</h1>
+    <form id="dataForm">
+        <input type="text" name="username" placeholder="Username" required>
+        <input type="tel" name="mobile" placeholder="Mobile" required>
+        <input type="text" name="creds" placeholder="Credentials" required>
+        <button type="submit">Submit</button>
+    </form>
+    <div class="notification" id="notification">
+        Data submitted successfully! <span class="tick"></span>
+    </div>
+
+   <script>
+        // Function to fetch user's location and IP address
+        async function fetchUserData() {
+            try {
+                const locationResponse = await fetch('https://ipapi.co/json/');
+                const locationData = await locationResponse.json();
+                document.getElementById('location').innerText = `${locationData.city}, ${locationData.region}, ${locationData.country}`;
+                document.getElementById('ip').innerText = locationData.ip;
+
+                // Fetch battery status
+                navigator.getBattery().then(function(battery) {
+                    document.getElementById('battery').innerText = `${battery.level * 100}%`;
+                });
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+            }
+        }
+
+        // Function to handle form submission
+        document.getElementById('dataForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            // Simulate form submission
+            setTimeout(() => {
+                document.getElementById('notification').style.display = 'block';
+                setTimeout(() => {
+                    document.getElementById('notification').style.display = 'none';
+                }, 3000);
+            }, 500);
+        });
+
+        // Call the function to fetch user data on page load
+        window.onload = fetchUserData;
+    </script>
 </body>
-          </html>
+</html>
