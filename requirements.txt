@@ -2,3 +2,5 @@ Flask==2.0.3
 Flask-Mail==0.9.1
 requests==2.26.0
 gunicorn==20.1.0
+pip freeze
+pip install Flask Flask-Mail requests gunicorn
